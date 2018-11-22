@@ -1,0 +1,14 @@
+{
+  "name": "RFlow",
+  "version": "1.0.2",
+  "description": "",
+  "main": "index.ts",
+  "dependencies": {
+    "redux-undo": "^0.6.1",
+    "wolfy87-eventemitter": "^5.2.5",
+    "dagre": "^0.8.2"
+  },
+  "devDependencies": {
+    "@types/node": "^10.5.2"
+  }
+}
