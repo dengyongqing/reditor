@@ -1,8 +1,8 @@
 /*
  * @Author: dengyongqing@aliyun.com 
  * @Date: 2018-07-10 06:33:10 
- * @Last Modified by: dengyongqing@aliyun.com
- * @Last Modified time: 2018-11-22 23:14:22
+ * @Last Modified by: dengyongqing
+ * @Last Modified time: 2019-01-30 17:28:07
  */
 
 const G6 = require("G6")
@@ -108,16 +108,24 @@ class Flow extends BaseDom {
 
     this.g6.on('click', (ev) => {
       const { item } = ev;
-      if (!item) { return; }
-      const { _attrs: { id } } = item;
-      if (item._attrs.shapeObj.clickPath) {
-        const { minX: l, minY: t } = item._attrs.boxStash;
-        item._attrs.shapeObj.clickPath({ l, t }, ev);
-      }
       if (ev.itemType === 'node') {
-        this.event.emitEvent('ToolBar@@listen_node', [ev.item._attrs]);
+        this.changeMode('edit');
       } else if (ev.itemType === 'edge') {
-        this.event.emitEvent('ToolBar@@listen_edge', [ev.item._attrs]);
+        this.changeMode('edit');
+      } else {
+        this.changeMode('drag');
+      }
+      if (item) { 
+        const { _attrs: { id } } = item;
+        if (item._attrs.shapeObj.clickPath) {
+          const { minX: l, minY: t } = item._attrs.boxStash;
+          item._attrs.shapeObj.clickPath({ l, t }, ev);
+        }
+        if (ev.itemType === 'node') {
+          this.event.emitEvent('ToolBar@@listen_node', [ev.item._attrs]);
+        } else if (ev.itemType === 'edge') {
+          this.event.emitEvent('ToolBar@@listen_edge', [ev.item._attrs]);
+        } 
       }
     })
 
