@@ -1,8 +1,8 @@
 /*
  * @Author: dengyongqing@aliyun.com 
  * @Date: 2018-07-09 10:35:23
- * @Last Modified by: dengyongqing@aliyun.com
- * @Last Modified time: 2018-11-22 22:09:31
+ * @Last Modified by: dengyongqing
+ * @Last Modified time: 2019-03-06 15:25:51
  */
 
 import BaseDom from './dom';
@@ -23,13 +23,35 @@ class ToolBar extends BaseDom {
   private containers: HTMLElement;
   private nodes: any;
   private datasets: Datasets;
-  private selected: any;
+  private selected: object;
   constructor(options: any) {
     super();
     this.event = null;
     this.options = options;
     this.datasets = {};
     this.selected = {};
+
+    document.addEventListener('keydown', (ev) => {
+      if (ev.target.nodeName === 'CANVAS' && ev.target.id.includes('canvas')) {
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode===8 || e.keyCode===46){//退格删除
+          const { selected: { id } } = this;
+          if (id) {
+            this.event.emitEvent('@delete_node', [id]);
+          }
+        }
+    
+        if(e && e.keyCode==27){ // 按 Esc 
+            //要做的事情
+        }
+        if(e && e.keyCode==113){ // 按 F2 
+            //要做的事情
+        }            
+        if(e && e.keyCode==13){ // enter 键
+            //要做的事情
+        }
+      }
+    }, true);
   }
 
   private undo() {

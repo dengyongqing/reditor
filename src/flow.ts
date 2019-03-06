@@ -2,7 +2,7 @@
  * @Author: dengyongqing@aliyun.com 
  * @Date: 2018-07-10 06:33:10 
  * @Last Modified by: dengyongqing
- * @Last Modified time: 2019-01-30 17:28:07
+ * @Last Modified time: 2019-03-06 15:25:32
  */
 
 const G6 = require("G6")
@@ -99,6 +99,7 @@ class Flow extends BaseDom {
         this.changeMode('edit');
       }
     });
+
     // this.g6.on('afteritemrender', (ev) => {
     //   var item = ev.item;
     //   if(item.get('type') === 'node'){
@@ -145,16 +146,16 @@ class Flow extends BaseDom {
         // const id2 = this.g6.geEdges();
         const g6 = this.g6;
         if (id.indexOf('node') !== -1) {
-          const edges = this.g6.find(id).getEdges();
-          const ids = edges.map(t => t._attrs.model.id);
-          if (ids.length) {
+          const edges = this.g6.find(id) && this.g6.find(id).getEdges();
+          const ids = edges && edges.map(t => t._attrs.model.id);
+          if (ids && ids.length) {
             this.sync({ type: 'edge', operate: 'delete', payload: { ids } });
             ids.forEach(element => {
               this.g6.remove(element);
             });
           }
           this.sync({ type: 'node', operate: 'delete', payload: { id } });
-          this.g6.remove(id);
+          this.g6.find(id) && this.g6.remove(id);
         } else {
           this.g6.remove(id);
           this.sync({ type: 'edge', operate: 'delete', payload: { ids: [id] } });
@@ -211,13 +212,11 @@ class Flow extends BaseDom {
     }, 50);
 
     // this.g6.on('beforeaddedge', ev => {
-    //   debugger;
     //   if (ev.anchor.type === 'input') {
     //     ev.cancel = true;
     //   }
     // });
     // this.g6.on('dragedge:beforeshowanchor', ev => {
-    //   debugger;
     //   // 只允许目标锚点是输入，源锚点是输出，才能连接
     //   if (!(ev.targetAnchor.type === 'input' && ev.sourceAnchor.type === 'output')) {
     //     ev.cancel = true;
@@ -339,9 +338,9 @@ class Flow extends BaseDom {
     const shape = ev.dataTransfer.getData('shape');
     const extendId = ev.dataTransfer.getData('extendId');
     const name = ev.dataTransfer.getData('name');
-    const theme = (ev.dataTransfer.getData('theme') === "undefined") ? "{}" : ev.dataTransfer.getData('theme');
+    const theme = ev.dataTransfer.getData('theme');
     const offsetTop = ev.dataTransfer.getData('offsetTop');
-    const stringify = (ev.dataTransfer.getData('stringify') === "undefined") ? "{}" : ev.dataTransfer.getData('stringify');
+    const stringify = ev.dataTransfer.getData('stringify');
     let nextNode: any;
     if (name === 'undefined') {
       const node = this.nodeMange.extendModelCard(shape,
@@ -395,12 +394,11 @@ class Flow extends BaseDom {
     //   arrow: true,
     // }
     // this.g6.add('edge', { source, id, target, style, shape: 'smooth', label: '' })
-    
     this.g6.refresh();
-    // setTimeout(() => {
-    //   const nodes = this.g6.getNodes();
-    //   this.sync({ type: 'node', operate: 'add', payload: {nodes} });
-    // }, 0)
+    setTimeout(() => {
+      const nodes = this.g6.getNodes();
+      this.sync({ type: 'node', operate: 'add', payload: {nodes} });
+    }, 0)
   }
 
   findDom() {

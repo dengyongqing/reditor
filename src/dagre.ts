@@ -29,8 +29,10 @@ function execute(source) {
   dagre.layout(g);
   g.nodes().forEach(v => {
     const node = g.node(v);
-    nodeMap[v].x = node.x;
-    nodeMap[v].y = node.y;
+    if (node) {
+      nodeMap[v].x = node.x;
+      nodeMap[v].y = node.y;
+    }
   });
   g.edges().forEach((e, i) => {
     const edge = g.edge(e);
