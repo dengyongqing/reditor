@@ -57,7 +57,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
     const toolbar = new ToolBar({
       container: 'toolbar',
     });
-
+    // private sync: (params: object) => void;
     const itempannel = new Itempannel({ container: 'itempannel', interactiveType: 'drag', templates: "" });
     const pages = document.getElementById('page');
     const page = new Flow({
@@ -68,6 +68,7 @@ export default class Editor extends React.Component<EditorProps, EditorState> {
         rollback: true,
         forceAlign: true,
       },
+      sync: () => {},
       // domClick: true,
       // translateDom: this.genDom,
       noEndEdge: false,
